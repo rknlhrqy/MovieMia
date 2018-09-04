@@ -17,8 +17,6 @@ export const submitSearch = (values) =>
                 }
             }
         });
-        console.log('submitSearch:', response.data);
-        console.log('submitSearch.dispatch:', dispatch);
         
         dispatch({
             type: SUBMIT_SEARCH,

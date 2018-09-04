@@ -31,6 +31,7 @@ SearchMovie = connect(null, actions)(SearchMovie);
 
 export default reduxForm({
     form: 'searchForm',
-    destroyOnUnmount: false
+    destroyOnUnmount: false,
+    forceUnregisterOnUnmount: false
 })(SearchMovie);
 

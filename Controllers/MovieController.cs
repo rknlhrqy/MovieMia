@@ -62,9 +62,10 @@ namespace MovieMia.Controllers
                 string movieTitle = collection["movieTitle"];
                 Console.WriteLine(movieTitle);
 
-                var movie = movieCollection.AsQueryable<DataModel>().SingleOrDefault(x => x.TitleName == movieTitle);
-                Console.WriteLine(movie);
-                return Json(movie);
+                //var movie = movieCollection.AsQueryable<DataModel>().SingleOrDefault(x => x.TitleName == movieTitle);
+                var movies = movieCollection.AsQueryable<DataModel>().Where(each => each.TitleName.ToLower().Contains(movieTitle));
+                Console.WriteLine(movies);
+                return Json(movies);
             }
             catch
             {

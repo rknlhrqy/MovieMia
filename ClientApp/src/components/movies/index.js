@@ -1,16 +1,21 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
-import MovieDetails from './MovieDetails';
+import MovieList from './MovieList';
 import SearchMovie from './SearchMovie';
 
 class Movies extends Component {
     state = { showMovieDetails: false };
 
+    componentWillMount() {
+        this.setState({ showMovieDetails: this.props.location.showMovieDetails });
+    }
+
     renderContent() {
         if (this.state.showMovieDetails) {
             return (
                 <div>
-                    <MovieDetails onCancel={() => this.setState({ showMovieDetails: false })} />
+                    <SearchMovie onSearchSubmit={() => this.setState({ showMovieDetails: true })} />
+                    <MovieList onCancel={() => this.setState({ showMovieDetails: false })} />
                 </div>
             );
         }
@@ -19,6 +24,7 @@ class Movies extends Component {
                 <SearchMovie onSearchSubmit={() => this.setState({ showMovieDetails: true })} />
             </div>
         );
+        
     }
 
     render() {
@@ -28,7 +34,9 @@ class Movies extends Component {
     }
 }
 
+
 export default reduxForm({
     form: 'searchForm',
-    destroyOnUnmount: true
+    destroyOnUnmount: false,
+    keepDirtyOnReinitialize: false
 })(Movies);

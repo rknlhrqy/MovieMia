@@ -1,70 +1,79 @@
-﻿import React from 'react';
+﻿import React, { Component }from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
 
 
-const isEmpty = (obj) => {
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-};
+class MovieDetails extends Component {
 
-const isAvailable = (obj) => {
-    if (obj && !isEmpty(obj)) {
+    isEmpty(obj) {
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key))
+                return false;
+        }
         return true;
     }
-    return false;
-};
 
-const renderStorylines = (storylines) => {
-    if (isAvailable(storylines)) {   
-        return (
-            <ul>
-                {storylines.map(each => {
-                    return (
-                        <li key={each.type}>
-                            <h5>{each.type} :</h5>
-                            <p>{each.description}</p>
-                        </li>
-                    );
-                })}
-            </ul>
-        );
+    isAvailable(obj) {
+        if (obj && !this.isEmpty(obj)) {
+            return true;
+        }
+        return false;
     }
-    return 'none';
-};
 
-const renderContent = (movie) => {
-    console.log(movie);
-    if (isAvailable(movie) && movie.movie !== null) {
-        const { titleName, releaseYear, storylines } = movie.movie;
+    renderStorylines(storylines) {
+        if (this.isAvailable(storylines)) {
+            return (
+                <ul>
+                    {storylines.map(each => {
+                        return (
+                            <li key={each.type}>
+                                <h5>{each.type} :</h5>
+                                <p>{each.description}</p>
+                            </li>
+                        );
+                    })}
+                </ul>
+            );
+        }
+        return 'none';
+    }
+
+    renderContent(movie) {
+        const movieId = this.props.match.params.movie_id;
+        if (this.isAvailable(movie) && movie.movie !== null) {
+            const movieData = movie.movie.find(each => each.id === movieId)
+            const { titleName, releaseYear, storylines } = movieData;
+            return (
+                <div>
+                    <h3>{titleName}</h3>
+                    <h4>Released in {releaseYear}.</h4>
+                    <h4>Story:</h4>
+                    {this.renderStorylines(storylines)}
+                </div>
+            );
+        }
+        return <h6>{'Not available'}</h6>;
+    }
+
+
+    render() {
+        const newTo = {
+            pathname: "/search",
+            showMovieDetails: true
+        };
         return (
             <div>
-                <h3>{titleName}</h3>
-                <h4>Released at {releaseYear}.</h4>
-                <h4>Story:</h4>
-                {renderStorylines(storylines)}
+                <Link to={newTo} className="btn btn-default">Back</Link>
+                {this.renderContent(this.props.movie)}
             </div>
         );
     }
-    return <h6>{'Not available'}</h6>;
-};
-
-const MovieDetails = (props) => {
-    return (
-        <div>
-            {renderContent(props.movie)}
-            <button onClick={props.onCancel} >Back</button>
-        </div>
-    );
 
 };
 
 
 const mapStateToProps = (state) => {
-    console.log('mapStateToProps:', state);
     return {movie: state.movie};
 }
 
