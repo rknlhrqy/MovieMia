@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+//import { reduxForm } from 'redux-form';
 import MovieList from './MovieList';
 import SearchMovie from './SearchMovie';
 
@@ -34,9 +34,4 @@ class Movies extends Component {
     }
 }
 
-
-export default reduxForm({
-    form: 'searchForm',
-    destroyOnUnmount: false,
-    keepDirtyOnReinitialize: false
-})(Movies);
+export default Movies;
